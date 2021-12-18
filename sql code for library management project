@@ -1,0 +1,215 @@
+# library-management-project-code-in-sql
+--Creating a database.
+create database [library_management_system];
+use [library_management_system]
+go
+
+--Creating Tables 
+--creating books table
+create table books(bookid smallint primary key,
+bookname nvarchar(50) not null, 
+isbn smallint,
+authorname nvarchar(50), 
+bookedition nvarchar(50) );
+
+--entering data into book table
+insert into books(bookid,bookname,isbn,authorname,bookedition)
+values(5632 ,'Hack the network',9875,'Mazhar','third'),
+(2567 ,'Linux command',5678,'javed','secound'),
+(4352 ,'Ethical Hacking',5652,'ramzan','first'),
+(1141 ,'web penetration',4151,'azhar','first');
+
+
+--creating issue table
+create table Issue(issue_id smallint primary key,
+book_id smallint not null,
+book_name nvarchar(50),
+date_issue nvarchar(50) default getdate(),
+date_expirary nvarchar(50),
+student_id smallint foreign key references student(student_id));
+
+--entering data into Issue table.
+insert into Issue (issue_id,book_id,book_name,date_issue,date_expirary,student_id)
+values(1151,5689,'linux tutorial',15-6-2021,1-7-2021,183),
+(1159,9869,'java for beginner',4-4-2021,25-4-2021,126),
+(1179,1125,'web designing',1-5-2021,16-5-2021,154),
+(1201,2526,'tcp/ip guide',1-5-2021,16-5-2021,325),
+(1245,5569,'Sql injection',5-3-2021,23-3-2021,889),
+(1270,7866,'web penetration',1-1-2021,16-5-2021,101),
+(1299,5594,'Networking',15-5-2021,30-6-2021,124),
+(1315,5648,'CCNA',15-6-2021,1-7-2021,521),
+(1381,5665,'HTML5 Guide',25-2-2021,15-3-2021,651),
+(1501,5899,'php development',21-4-2021,5-5-2021,800);
+
+--creating student table
+create table student(student_id smallint primary key,
+student_name nvarchar(50) not null,
+Gender nvarchar(25), 
+studentdepartment nvarchar(max),
+department_id smallint);
+
+--Entering data into student table.
+insert into student(student_id,student_name,Gender,studentdepartment,department_id)
+values(126,'Aashish','male','CS',12),
+(154,'Amisha','female','CS',12),
+(183,'Sumit','male','IT',12),
+(1097,'Monty','male','Law department',16),
+(1526,'Anju','female','Commerce',17),
+(1627,'Jyoti','female','Commerce',17),
+(2026,'Vikas','male','BBA',23),
+(2397,'Sangeeta','female','English',25),
+(2529,'Neetu','male','Physics',26);
+
+
+--adding foreign key in a table.
+alter table student
+add foreign key(department_id) references Department(Dep_id);
+
+--creating student contact table 
+create table [student contact](student_id smallint foreign key references student(student_id),
+[Address]nvarchar(50) not null,
+city nvarchar(50) not null,
+[state] nvarchar(50) not null,
+phone int not null);
+
+--entering data into [dbo].[student contact] table.
+insert into [dbo].[student contact](student_id,[Address],city,[state],phone)
+values(126,'Bhiwani','Bhiwani','Haryana',1234678950),
+(154,'Meham','Rohtak','Haryana',9876543210),
+(183,'block 11','Sargodha','Punjab',4567991230),
+(196,'block 6','Sargodha','Punjab',7418523690),
+(224,'sec-1','Rohtak','Haryana',8523697410),
+(231,'beri','Rohtak','Haryana',7536984120),
+(236,'sec-5','Gurugram','Haryana',7532146980);
+
+--creating department table
+create table department (Dep_id smallint primary key,
+Departmentname nvarchar(50),
+student_id smallint foreign key references student(student_id));
+
+--entering data into department table
+insert into department(Dep_id,Departmentname,student_id)
+values(11,'IT department',183),
+(13,'physics',315),
+(14,'Chemistry',501),
+(17,'Commerce',751),
+(18,'business',901),
+(19,'economics',1171),
+(21,'food science',1401),
+(22,'English',1655),
+(23,'math',1831),
+(24,'islamic',2101),
+(25,'urdu',2405),
+(26,'education',2627);
+
+--creating return table 
+create table [Return](return_id smallint primary key,
+book_id smallint foreign key references books(bookid),
+issue_date date,
+expairy_date date,
+return_date date not null,
+student_id smallint foreign key references student(student_id),
+staff_id nvarchar(50) foreign key references Staff(staff_id),
+issue_id smallint foreign key references Issue(issue_id));
+
+--entering data to [Return] table.
+insert into [Return](return_id,book_id,issue_date,expairy_date,return_date,student_id,staff_id,issue_id)
+values(5645,456,'2021-01-03','2021-03-10','2021-09-03',115,'sf12',2156),
+(5699,1122,'2021-01-05','2021-05-01','2021-07-04',526,'sf15',556),
+(5756,2654,'2021-01-06','2021-01-15','2021-01-15',556,'sf13',556);
+
+
+--creating Staff table 
+create table Staff (staff_id nvarchar(50) primary key,
+[name] nchar(15) not null,
+gender nchar(15),
+Deg_id nvarchar(50) foreign key references Deginations(Dg_id));
+
+--entering data into Staff table.
+insert into Staff(staff_id,[name],gender,Deg_id)
+values('sf12','Sangeeta','female','dg56'),
+('sf15','Latif','male','dg60'),
+('sf16','Irfan','male','dg65'),
+('sf17','Sucheta','female','dg66'),
+('sf18','Indu','female','dg69'),
+('sf19','Madhu','female','dg70'),
+('sf20','Shrikant','male','dg71'),
+('sf21','Preeti','female','dg72');
+
+--creating staff degination table
+create table Deginations(Dg_id nvarchar(50) primary key,
+designation nchar(10),
+staff_id nvarchar(50)); 
+
+--entering data into degination table.
+insert into Deginations(Dg_id,designation,staff_id)
+values('dg3','naibqasid','sf15'),
+('dg4','sweeper','sf10'),
+('dg5','bookkeeper','sf11'),
+('dg11','librarian','sf13'),
+('dg12','clerk','sf16');
+
+--altering table degination.
+alter table Deginations 
+add foreign key (staff_id) references Staff(staff_id);
+
+--creating Staff contact table 
+create table [Staff contact](staff_id nvarchar(50) foreign key references Staff(staff_id),
+[address] nvarchar(50)not null,
+city nchar(10),
+[state] nchar(10) not null,
+phone numeric(18,0));
+
+--entering data into Staff contact table.
+insert into [Staff contact](staff_id,[address],city,[state],phone)
+values('sf12','block 4','sargodha','punjab',1234567890),
+('sf15','bhiwani','bhiwani','haryana',7418529630),
+('sf17','rohtak','rohtak','haryana',3698521470),
+('sf26','meham','rohtak','haryana',1596328740);
+
+--Taking a full backup.
+backup database [library_management_system] to disk='C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS01\MSSQL\Backup\library_management_system.bak' with init, stats = 5
+
+--Taking a Differential backup.
+backup database [library_management_system] to disk='C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS01\MSSQL\Backup\library_management_system.bak' with init, differential, stats = 5
+
+--Taking a Tranlog(Transactional or log) backup.
+Backup log [library_management_system] to disk='C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS01\MSSQL\Backup\library_management_system.trn' with stats = 5
+
+--Performing cross join.
+select *from [dbo].[Issue],[dbo].[Return];
+
+--Performing inner join.
+select s.student_id,i.book_name,i.date_issue,i.date_expirary  
+from Issue i inner join student s on i.student_id=s.student_id;
+
+--Performing outer join.
+select * from [dbo].[student] s full outer join [dbo].[student contact] sc on 
+s.student_id= sc.student_id; -- In this same method we can perform other parts of outer join.
+
+--Creating a stored procedure (sp).
+create procedure studbook @studentid int 
+as
+select s.student_id,i.book_name,i.date_issue,i.date_expirary  
+from Issue i inner join student s on i.student_id=s.student_id 
+where s.student_id= @studentid;
+
+--creating view of a table.
+create view computerstud
+as
+select* from [dbo].[department] where Departmentname in (IT , CS);
+
+--Comments this is a single line comment.
+
+/* This is a multi-line
+   comment guy's.*/
+-- Using Wildcards.
+select *from [dbo].[student]
+where student_name like'A%';
+
+select *from [dbo].[student]
+where student_name like'%A_';
+
+select count(student_name) from student
+group by studentdepartment
+having studentdepartment= cs;
